@@ -4,8 +4,8 @@ import dotenv from "dotenv";
 import "./models/Location";
 import "./models/Inventory";
 import { sequelize } from "./db";
-// import inventoriesRouter from './routes/inventories';
-// import locationsRouter from './routes/locations';
+import inventoriesRouter from "./routes/inventories";
+import locationsRouter from "./routes/locations";
 
 dotenv.config();
 
@@ -13,8 +13,8 @@ const app = express();
 app.use(cors());
 app.use(express.json());
 
-// app.use('/inventories', inventoriesRouter);
-// app.use('/locations', locationsRouter);
+app.use("/inventories", inventoriesRouter);
+app.use("/locations", locationsRouter);
 
 const PORT = process.env.PORT || 4000;
 
