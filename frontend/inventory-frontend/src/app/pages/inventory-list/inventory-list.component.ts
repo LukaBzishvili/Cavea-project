@@ -4,11 +4,12 @@ import { Router } from '@angular/router';
 import { FormsModule } from '@angular/forms';
 import { InventoryService } from '../../services/inventory.service';
 import { Inventory, Location } from '../../models';
+import { LoaderComponent } from '../../shared/loader/loader.component';
 
 @Component({
   selector: 'app-inventory-list',
   standalone: true,
-  imports: [CommonModule, FormsModule],
+  imports: [CommonModule, FormsModule, LoaderComponent],
   templateUrl: './inventory-list.component.html',
   styleUrls: ['./inventory-list.component.scss'],
 })
