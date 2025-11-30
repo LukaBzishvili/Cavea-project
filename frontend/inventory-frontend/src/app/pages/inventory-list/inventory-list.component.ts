@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { Router } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { FormsModule } from '@angular/forms';
 import { InventoryService } from '../../services/inventory.service';
 import { Inventory, Location } from '../../models';
@@ -29,12 +29,36 @@ export class InventoryListComponent implements OnInit {
 
   constructor(
     private inventoryService: InventoryService,
-    private router: Router
+    private router: Router,
+    private route: ActivatedRoute
   ) {}
 
   ngOnInit(): void {
     this.fetchLocations();
-    this.fetchInventories();
+
+    this.route.queryParamMap.subscribe((params) => {
+      const pageParam = params.get('page');
+      const locationParam = params.get('locationId');
+      const sortByParam = params.get('sortBy');
+      const sortDirParam = params.get('sortDir');
+
+      this.page = pageParam ? Number(pageParam) || 1 : 1;
+
+      this.selectedLocationId = locationParam ? Number(locationParam) : null;
+
+      if (
+        sortByParam === 'price' ||
+        sortByParam === 'location' ||
+        sortByParam === 'name'
+      ) {
+        this.sortBy = sortByParam;
+      } else {
+        this.sortBy = 'name';
+      }
+
+      this.sortDir = sortDirParam === 'desc' ? 'desc' : 'asc';
+      this.fetchInventories();
+    });
   }
 
   fetchLocations() {
@@ -71,9 +95,22 @@ export class InventoryListComponent implements OnInit {
       });
   }
 
+  private updateQueryParams() {
+    this.router.navigate([], {
+      relativeTo: this.route,
+      queryParams: {
+        page: this.page !== 1 ? this.page : null,
+        locationId: this.selectedLocationId ?? null,
+        sortBy: this.sortBy !== 'name' ? this.sortBy : null,
+        sortDir: this.sortDir !== 'asc' ? this.sortDir : null,
+      },
+      queryParamsHandling: 'merge',
+    });
+  }
+
   onLocationChange() {
     this.page = 1;
-    this.fetchInventories();
+    this.updateQueryParams();
   }
 
   totalPages(): number {
@@ -83,14 +120,14 @@ export class InventoryListComponent implements OnInit {
   prevPage() {
     if (this.page > 1) {
       this.page--;
-      this.fetchInventories();
+      this.updateQueryParams();
     }
   }
 
   nextPage() {
     if (this.page < this.totalPages()) {
       this.page++;
-      this.fetchInventories();
+      this.updateQueryParams();
     }
   }
 
@@ -101,7 +138,7 @@ export class InventoryListComponent implements OnInit {
       this.sortBy = field;
       this.sortDir = 'asc';
     }
-    this.fetchInventories();
+    this.updateQueryParams();
   }
 
   deleteItem(item: Inventory) {
