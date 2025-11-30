@@ -5,6 +5,7 @@ import { FormsModule } from '@angular/forms';
 import { InventoryService } from '../../services/inventory.service';
 import { Inventory, Location } from '../../models';
 import { LoaderComponent } from '../../shared/loader/loader.component';
+import { LocationService } from '../../services/location.service';
 
 @Component({
   selector: 'app-inventory-list',
@@ -30,7 +31,8 @@ export class InventoryListComponent implements OnInit {
   constructor(
     private inventoryService: InventoryService,
     private router: Router,
-    private route: ActivatedRoute
+    private route: ActivatedRoute,
+    private locationService: LocationService
   ) {}
 
   ngOnInit(): void {
@@ -62,7 +64,7 @@ export class InventoryListComponent implements OnInit {
   }
 
   fetchLocations() {
-    this.inventoryService.getLocations().subscribe({
+    this.locationService.getLocations().subscribe({
       next: (locations) => (this.locations = locations),
       error: () => (this.error = 'Failed to load locations'),
     });

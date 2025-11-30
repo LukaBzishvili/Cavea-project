@@ -10,10 +10,6 @@ export class InventoryService {
   constructor(private http: HttpClient) {}
   private readonly apiUrl = 'http://localhost:4000';
 
-  getLocations(): Observable<Location[]> {
-    return this.http.get<Location[]>(`${this.apiUrl}/locations`);
-  }
-
   getInventories(options: {
     page?: number;
     limit?: number;

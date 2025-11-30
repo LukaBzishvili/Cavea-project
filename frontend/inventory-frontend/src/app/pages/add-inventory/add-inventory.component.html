@@ -1,40 +1,61 @@
-<h2>Add item</h2>
-
+<div
+  class="d-flex flex-direction-row align-items-center w-100 justify-content-between"
+>
+  <h2>{{ !isLocation ? "Add item" : "Add location" }}</h2>
+  <button class="btn btn-secondary" (click)="addItemOrLocation()">
+    {{ !isLocation ? "Add location" : "Add item" }}
+  </button>
+</div>
 <div *ngIf="error" class="alert alert-danger mt-3">{{ error }}</div>
 
 <form class="mt-3" [formGroup]="form" (ngSubmit)="onSubmit()">
-  <div class="mb-3">
-    <label class="form-label">Location</label>
-    <select class="form-select" formControlName="locationId">
-      <option [ngValue]="null">Select location...</option>
-      <option *ngFor="let loc of locations" [ngValue]="loc.id">
-        {{ loc.name }}
-      </option>
-    </select>
-    <div
-      class="text-danger small"
-      *ngIf="submitted && f.locationId.errors?.['required']"
-    >
-      Location is required.
+  <div *ngIf="!isLocation">
+    <div class="mb-3">
+      <label class="form-label">Location</label>
+      <select class="form-select" formControlName="locationId">
+        <option [ngValue]="null">Select location...</option>
+        <option *ngFor="let loc of locations" [ngValue]="loc.id">
+          {{ loc.name }}
+        </option>
+      </select>
+      <div
+        class="text-danger small"
+        *ngIf="submitted && f.locationId.errors?.['required']"
+      >
+        Location is required.
+      </div>
+    </div>
+
+    <div class="mb-3">
+      <label class="form-label">Name</label>
+      <input type="text" class="form-control" formControlName="name" />
+      <div
+        class="text-danger small"
+        *ngIf="submitted && f.name.errors?.['required']"
+      >
+        Name is required.
+      </div>
+    </div>
+
+    <div class="mb-3">
+      <label class="form-label">Price (GEL)</label>
+      <input type="number" class="form-control" formControlName="price" />
+      <div class="text-danger small" *ngIf="submitted && f.price.errors">
+        Price is required and must be positive.
+      </div>
     </div>
   </div>
 
-  <div class="mb-3">
-    <label class="form-label">Name</label>
-    <input type="text" class="form-control" formControlName="name" />
-    <div
-      class="text-danger small"
-      *ngIf="submitted && f.name.errors?.['required']"
-    >
-      Name is required.
-    </div>
-  </div>
-
-  <div class="mb-3">
-    <label class="form-label">Price (GEL)</label>
-    <input type="number" class="form-control" formControlName="price" />
-    <div class="text-danger small" *ngIf="submitted && f.price.errors">
-      Price is required and must be positive.
+  <div *ngIf="isLocation">
+    <div class="mb-3">
+      <label class="form-label">Name</label>
+      <input type="text" class="form-control" formControlName="name" />
+      <div
+        class="text-danger small"
+        *ngIf="submitted && f.name.errors?.['required']"
+      >
+        Location Name is required.
+      </div>
     </div>
   </div>
 
