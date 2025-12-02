@@ -8,7 +8,7 @@ Small functional Inventories website made using Angular and typescript as backen
    - run the command in terminal: npm install
    - on backend/.env change DB_PASSWORD value to your database password
    - run the code using: npm run dev.
-   - you can seed the database with tables using: npm sun seed.
+   - you can seed the database with tables using: npm run seed.
 
 2. frontend:
 
